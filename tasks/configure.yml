@@ -15,4 +15,4 @@
     group: "{{ postgresql_group }}"
     mode: 02775
   with_items: "{{ postgresql_unix_socket_directories }}"
-  notify: Start and enable postgresql
+  notify: Start postgresql

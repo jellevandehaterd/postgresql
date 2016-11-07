@@ -11,10 +11,19 @@
 - include: initialize.yml
 - include: configure.yml
 
+- name: Check postgresql status
+  debug: msg="{{ lookup('pipe', 'su -c \"'+ postgresql_bin_path +'/pg_ctl -- status\" postgres') }}"
+  register: postgresql_status
+  ignore_errors: True
+
+- name: Start postgresql
+  command: 'gosu postgres {{ postgresql_bin_path }}/pg_ctl -- start -s -w -t 10 -l {{postgresql_log_path}}/postgresql.log'
+  when: "'server is running' not in postgresql_status.msg"
+
+- debug: msg="{{ lookup('pipe', 'su -c \"'+ postgresql_bin_path +'/pg_ctl -- status\" postgres') }}"
+
+
 # Configure PostgreSQL.
 - include: databases.yml
 - include: users.yml
 
-- debug: msg="Restart postgresql"
-  notify: Restart postgresql
-  changed_when: true

@@ -1,5 +1,5 @@
 ---
-- name: Start and enable postgresql
+- name: Start postgresql
   command: 'gosu postgres {{ postgresql_bin_path }}/pg_ctl -- start -s -w -t 10 -l {{postgresql_log_path}}/postgresql.log'
 
 - name: Restart postgresql
@@ -7,4 +7,7 @@
 
 - name: Stop postgresql
   command: 'gosu postgres {{ postgresql_bin_path }}/pg_ctl -- stop -s -m fast'
+
+- name: Status postgresql
+  command: 'gosu postgres {{ postgresql_bin_path }}/pg_ctl -- status'
 
