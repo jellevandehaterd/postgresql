@@ -1,0 +1,12 @@
+---
+# vars file for postgresql
+__become_method: su
+__postgresql_version: "9.5.4-r0"
+__postgresql_data_dir: "/var/lib/postgresql/main"
+__postgresql_bin_path: "/usr/bin"
+__postgresql_config_path: "/var/lib/postgresql/main"
+__postgresql_log_path: "/var/log/postgresql"
+__postgresql_daemon: postgresql
+__postgresql_packages:
+  - postgresql
+  - postgresql-contrib

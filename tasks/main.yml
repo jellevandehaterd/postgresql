@@ -1,2 +1,20 @@
 ---
 # tasks file for postgresql
+
+# Variable configuration.
+- include: variables.yml
+
+# Setup/install tasks.
+- include: setup-Alpine.yml
+  when: ansible_os_family == 'Alpine'
+
+- include: initialize.yml
+- include: configure.yml
+
+# Configure PostgreSQL.
+- include: databases.yml
+- include: users.yml
+
+- debug: msg="Restart postgresql"
+  notify: Restart postgresql
+  changed_when: true

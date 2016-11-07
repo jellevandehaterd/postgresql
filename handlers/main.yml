@@ -1,2 +1,6 @@
 ---
 # handlers file for postgresql
+- name: Include OS-specific handlers (Alpine).
+  include: "Alpine.yml"
+  static: yes
+  when: ansible_os_family == 'Alpine'

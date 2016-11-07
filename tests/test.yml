@@ -1,5 +1,10 @@
 ---
-- hosts: localhost
-  remote_user: root
+- hosts: all
+  vars:
+    postgresql_databases:
+      - name: exampledb
+    postgresql_users:
+      - name: demo
+        db: exampledb
   roles:
-    - postgresql
+    - role_under_test

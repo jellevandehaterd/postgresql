@@ -1,0 +1,37 @@
+---
+- name: Set PostgreSQL environment variables.
+  template:
+    src: postgres.sh.j2
+    dest: /etc/profile.d/postgres
+    mode: 0644
+
+- name: Ensure PostgreSQL data directory exists.
+  file:
+    path: "{{ postgresql_data_dir }}"
+    owner: "{{ postgresql_user }}"
+    group: "{{ postgresql_group }}"
+    state: directory
+    mode: 0700
+
+- name: Ensure PostgreSQL log dirrectory exists.
+  file:
+    path: "{{ postgresql_log_path }}"
+    owner: "{{ postgresql_user }}"
+    group: "{{ postgresql_group }}"
+    state: directory
+    mode: 0700
+
+- name: Check if PostgreSQL database is initialized.
+  stat:
+    path: "{{ postgresql_data_dir }}/PG_VERSION"
+  register: pgdata_dir_version
+
+- name: Ensure PostgreSQL database is initialized.
+  command: "{{ postgresql_bin_path }}/initdb -D {{ postgresql_data_dir }} --encoding 'UTF-8' --no-locale"
+  when: not pgdata_dir_version.stat.exists
+  become: yes
+  become_user: "{{ postgresql_user }}"
+  become_method: "{{ become_method | default(omit) }}"
+  # See: https://github.com/ansible/ansible/issues/16048#issuecomment-229012509
+  vars:
+    ansible_ssh_pipelining: true
