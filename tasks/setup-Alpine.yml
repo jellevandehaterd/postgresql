@@ -1,7 +1,7 @@
 ---
 
 - name: Install builddeps
-  command: apk --no-cache add --virtual build-deps python ca-certificates openssl
+  command: apk --no-cache add --virtual build-deps python-dev ca-certificates openssl
   args:
     creates: /usr/local/bin/gosu
   register: gosu_installed
@@ -14,7 +14,7 @@
     validate_certs: no
 
 - name: Ensure PostgreSQL Python libraries are installed.
-  apk: "name=py-psycopg2 state=installed"
+  command: apk --no-cache add py-psycopg2
 
 - name: Ensure PostgreSQL packages are installed.
   command: "apk add --no-cache --update {{item}}={{postgresql_version}}"
