@@ -15,6 +15,8 @@
 
 - name: Ensure PostgreSQL Python libraries are installed.
   command: apk --no-cache add py-psycopg2
+  args:
+    creates: /usr/lib/*/site-packages/psycopg2
 
 - name: Ensure PostgreSQL packages are installed.
   command: "apk add --no-cache --update {{item}}={{postgresql_version}}"
