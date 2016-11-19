@@ -13,12 +13,13 @@
 
 - block:
   - name: Check postgresql status
-    debug: msg="{{ lookup('pipe', become_method+' -c \"'+ postgresql_bin_path +'/pg_ctl -- status\" postgres') }}"
+    debug:
+      msg: "{{ lookup('pipe', 'gosu'+' postgresql_user postgresql_bin_path +'/pg_ctl -- status') }}"
     register: postgresql_status
     ignore_errors: True
 
   - name: Start postgresql
-    command: 'gosu postgres {{ postgresql_bin_path }}/pg_ctl -- start -s -w -t 10 -l {{postgresql_log_path}}/postgresql.log'
+    command: 'gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- start -s -w -t 10 -l {{postgresql_log_path}}/postgresql.log'
     when: "'server is running' not in postgresql_status.msg"
   when: ansible_os_family == 'Alpine'
 

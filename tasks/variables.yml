@@ -4,11 +4,6 @@
   include_vars: "{{ ansible_os_family }}.yml"
   when: ansible_os_family == 'Alpine'
 
-- name: Define become method
-  set_fact:
-    become_method: "{{ __become_method }}"
-  when: become_method is not defined
-
 - name: Define postgresql_packages.
   set_fact:
     postgresql_packages: "{{ __postgresql_packages | list }}"
