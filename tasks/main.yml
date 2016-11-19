@@ -14,7 +14,7 @@
 - block:
   - name: Check postgresql status
     debug:
-      msg: "{{ lookup('pipe', 'gosu'+' postgresql_user postgresql_bin_path +'/pg_ctl -- status') }}"
+      msg: "{{ lookup('pipe', 'gosu '+ postgresql_user+' '+postgresql_bin_path +'/pg_ctl -- status') }}"
     register: postgresql_status
     ignore_errors: True
 
