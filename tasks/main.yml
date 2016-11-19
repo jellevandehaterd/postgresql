@@ -11,17 +11,16 @@
 - include: initialize.yml
 - include: configure.yml
 
-- name: Check postgresql status
-  debug: msg="{{ lookup('pipe', 'su -c \"'+ postgresql_bin_path +'/pg_ctl -- status\" postgres') }}"
-  register: postgresql_status
-  ignore_errors: True
+- block:
+  - name: Check postgresql status
+    debug: msg="{{ lookup('pipe', become_method+' -c \"'+ postgresql_bin_path +'/pg_ctl -- status\" postgres') }}"
+    register: postgresql_status
+    ignore_errors: True
 
-- name: Start postgresql
-  command: 'gosu postgres {{ postgresql_bin_path }}/pg_ctl -- start -s -w -t 10 -l {{postgresql_log_path}}/postgresql.log'
-  when: "'server is running' not in postgresql_status.msg"
-
-- debug: msg="{{ lookup('pipe', 'su -c \"'+ postgresql_bin_path +'/pg_ctl -- status\" postgres') }}"
-
+  - name: Start postgresql
+    command: 'gosu postgres {{ postgresql_bin_path }}/pg_ctl -- start -s -w -t 10 -l {{postgresql_log_path}}/postgresql.log'
+    when: "'server is running' not in postgresql_status.msg"
+  when: ansible_os_family == 'Alpine'
 
 # Configure PostgreSQL.
 - include: databases.yml
