@@ -21,6 +21,11 @@
   - name: Start postgresql
     command: 'gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- start -D {{ postgresql_data_dir }} -s -w -t 10 -l {{postgresql_log_path}}/postgresql.log'
     when: "'server is running' not in postgresql_status.msg"
+
+  - name: Wait for postgres to be started
+    wait_for: port=5432 delay=10
+    when: "'server is running' not in postgresql_status.msg"
+
   when: ansible_os_family == 'Alpine'
 
 # Configure PostgreSQL.
