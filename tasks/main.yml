@@ -19,15 +19,15 @@
 
   - name: Start postgresql
     command: 'gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- start -D {{ postgresql_data_dir }} -s -w -t 10 -l {{postgresql_log_path}}/postgresql.log'
-    when: result.stdout.find("server is running") == -1
+    when: postgresql_status.stdout.find("server is running") == -1
 
   - name: Wait for postgres to be started
     shell: "/usr/local/bin/gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- status -D {{ postgresql_data_dir }}"
     register: postgresql_started
-    until: result.stdout.find("server is running") != -1
+    until: postgresql_started.stdout.find("server is running") != -1
     retries: 10
     delay: 10
-    when: result.stdout.find("server is running") == -1
+    when: postgresql_status.stdout.find("server is running") == -1
 
   when: ansible_os_family == 'Alpine'
 
