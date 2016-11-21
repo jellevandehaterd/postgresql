@@ -23,7 +23,12 @@
     when: "'server is running' not in postgresql_status.msg"
 
   - name: Wait for postgres to be started
-    wait_for: port=5432 delay=10
+    debug:
+      msg: "{{ lookup('pipe', 'gosu '+ postgresql_user+' '+postgresql_bin_path +'/pg_ctl -- status') }}"
+    register: postgresql_started
+    until: "'server is running' in postgresql_started.msg"
+    retries: 10
+    delay: 10
     when: "'server is running' not in postgresql_status.msg"
 
   when: ansible_os_family == 'Alpine'
