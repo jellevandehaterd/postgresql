@@ -13,23 +13,21 @@
 
 - block:
   - name: Check postgresql status
-    debug:
-      msg: "{{ lookup('pipe', '/usr/local/bin/gosu '+ postgresql_user+' '+postgresql_bin_path +'/pg_ctl -- status -D {{ postgresql_data_dir }}') }}"
+    shell: "/usr/local/bin/gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- status -D {{ postgresql_data_dir }}"
     register: postgresql_status
     ignore_errors: True
 
   - name: Start postgresql
     command: 'gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- start -D {{ postgresql_data_dir }} -s -w -t 10 -l {{postgresql_log_path}}/postgresql.log'
-    when: "'server is running' not in postgresql_status.msg"
+    when: postgresql_status.stdout.find("server is running") == -1
 
   - name: Wait for postgres to be started
-    debug:
-      msg: "{{ lookup('pipe', '/usr/local/bin/gosu '+ postgresql_user+' '+postgresql_bin_path +'/pg_ctl -- status -D {{ postgresql_data_dir }}') }}"
+    shell: "/usr/local/bin/gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- status -D {{ postgresql_data_dir }}"
     register: postgresql_started
-    until: "'server is running' in postgresql_started.msg"
+    until: postgresql_started.stdout.find("server is running") != -1
     retries: 10
     delay: 10
-    when: "'server is running' not in postgresql_status.msg"
+    when: postgresql_status.stdout.find("server is running") == -1
 
   when: ansible_os_family == 'Alpine'
 
