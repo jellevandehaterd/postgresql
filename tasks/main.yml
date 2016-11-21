@@ -14,7 +14,7 @@
 - block:
   - name: Check postgresql status
     debug:
-      msg: "{{ lookup('pipe', 'gosu '+ postgresql_user+' '+postgresql_bin_path +'/pg_ctl -- status') }}"
+      msg: "{{ lookup('pipe', 'gosu '+ postgresql_user+' '+postgresql_bin_path +'/pg_ctl -- status -D {{ postgresql_data_dir }}') }}"
     register: postgresql_status
     ignore_errors: True
 
@@ -24,7 +24,7 @@
 
   - name: Wait for postgres to be started
     debug:
-      msg: "{{ lookup('pipe', 'gosu '+ postgresql_user+' '+postgresql_bin_path +'/pg_ctl -- status') }}"
+      msg: "{{ lookup('pipe', 'gosu '+ postgresql_user+' '+postgresql_bin_path +'/pg_ctl -- status -D {{ postgresql_data_dir }}') }}"
     register: postgresql_started
     until: "'server is running' in postgresql_started.msg"
     retries: 10

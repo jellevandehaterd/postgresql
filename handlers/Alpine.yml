@@ -1,13 +1,13 @@
 ---
 - name: Start postgresql
-  command: 'gosu postgres {{ postgresql_bin_path }}/pg_ctl -- start -s -w -t 10 -l {{postgresql_log_path}}/postgresql.log'
+  command: 'gosu postgres {{ postgresql_bin_path }}/pg_ctl -- start -D {{ postgresql_data_dir }} -s -w -t 10 -l {{postgresql_log_path}}/postgresql.log'
 
 - name: Restart postgresql
-  command: 'gosu postgres {{ postgresql_bin_path }}/pg_ctl -- restart -s -w -t 10 -m fast -l {{postgresql_log_path}}/postgresql.log'
+  command: 'gosu postgres {{ postgresql_bin_path }}/pg_ctl -- restart -D {{ postgresql_data_dir }} -s -w -t 10 -m fast -l {{postgresql_log_path}}/postgresql.log'
 
 - name: Stop postgresql
-  command: 'gosu postgres {{ postgresql_bin_path }}/pg_ctl -- stop -s -m fast'
+  command: 'gosu postgres {{ postgresql_bin_path }}/pg_ctl -- stop -D {{ postgresql_data_dir }} -s -m fast'
 
 - name: Status postgresql
-  command: 'gosu postgres {{ postgresql_bin_path }}/pg_ctl -- status'
+  command: 'gosu postgres {{ postgresql_bin_path }}/pg_ctl -- status -D {{ postgresql_data_dir }}'
 
