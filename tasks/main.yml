@@ -15,7 +15,8 @@
   - name: Check postgresql status
     shell: "/usr/local/bin/gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- status -D {{ postgresql_data_dir }}"
     register: postgresql_status
-    ignore_errors: True
+    changed_when: False
+    failed_when: postgresql_status.stdout.find("FAILED") != -1
 
   - name: Start postgresql
     command: 'gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- start -D {{ postgresql_data_dir }} -s -w -t 10 -l {{postgresql_log_path}}/postgresql.log'
