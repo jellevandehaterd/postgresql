@@ -43,3 +43,19 @@ postgresql_users: []
   #   login_unix_socket: # defaults to 1st of postgresql_unix_socket_directories
   #   port: # defaults to not set
   #   state: # defaults to 'present'
+
+
+# pg_hba.conf
+postgresql_default_auth_method: "trust"
+postgresql_pg_hba_default:
+  - { type: local, database: all, user: '{{ postgresql_user }}', address: '', method: '{{ postgresql_default_auth_method }}', comment: '' }
+  - { type: local, database: all, user: all, address: '',             method: '{{ postgresql_default_auth_method }}', comment: '"local" is for Unix domain socket connections only' }
+  - { type: host,  database: all, user: all, address: '127.0.0.1/32', method: '{{ postgresql_default_auth_method }}', comment: 'IPv4 local connections:' }
+  - { type: host,  database: all, user: all, address: '::1/128',      method: '{{ postgresql_default_auth_method }}', comment: 'IPv6 local connections:' }
+
+postgresql_pg_hba_passwd_hosts: []
+
+postgresql_pg_hba_trust_hosts:
+  - '172.17.0.0/16' # Docker host connections
+
+postgresql_pg_hba_custom: []
