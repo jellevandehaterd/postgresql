@@ -63,7 +63,7 @@ postgresql_pg_hba_default:
 
 postgresql_pg_hba_passwd_hosts: []
 
-postgresql_pg_hba_trust_hosts:
-  - '172.17.0.0/16' # Docker host connections
+postgresql_pg_hba_trust_hosts: []
 
-postgresql_pg_hba_custom: []
+postgresql_pg_hba_custom:
+  - { type: host,  database: all, user: all, address: '172.17.0.0/16',      method: 'md5', comment: 'Docker host connections:' }
