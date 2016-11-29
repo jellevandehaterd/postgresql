@@ -9,8 +9,16 @@ postgresql_unix_socket_directories:
 
 # Global configuration options that will be set in postgresql.conf.
 postgresql_global_config_options:
+  - option: listen_addresses
+    value:  "localhost"
+  - option: port
+    value:  "5432"
   - option: unix_socket_directories
-    value: '{{ postgresql_unix_socket_directories | join(",") }}'
+    value:  "{{ postgresql_unix_socket_directories | join(",") }}"
+  - option: data_directory
+    value:  "{{ postgresql_data_dir }}"
+  - option: hba_file
+    value:  "{{postgresql_config_path}}/pg_hba.conf"
 
 ## Debian only. Used to generate the locales used by PostgreSQL databases.
 #postgresql_locales:
