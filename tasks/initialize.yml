@@ -7,11 +7,14 @@
 
 - name: Ensure PostgreSQL data directory exists.
   file:
-    path: "{{ postgresql_data_dir }}"
+    path: "{{ item }}"
     owner: "{{ postgresql_user }}"
     group: "{{ postgresql_group }}"
     state: directory
     mode: 0700
+  with_items:
+    - "{{ postgresql_data_dir | dirname }}"
+    - "{{ postgresql_data_dir }}"
 
 - name: Ensure PostgreSQL log dirrectory exists.
   file:

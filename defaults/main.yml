@@ -10,7 +10,7 @@ postgresql_unix_socket_directories:
 # Global configuration options that will be set in postgresql.conf.
 postgresql_global_config_options:
   - option: listen_addresses
-    value:  "localhost"
+    value:  "*"
   - option: port
     value:  "5432"
   - option: unix_socket_directories
