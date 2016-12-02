@@ -1,7 +1,7 @@
 ---
 
 - name: Install builddeps
-  command: apk --no-cache add --virtual build-deps python-dev ca-certificates openssl
+  command: apk --no-cache add --virtual postgres-build-deps python-dev ca-certificates openssl
   args:
     creates: /usr/local/bin/gosu
   register: gosu_installed
@@ -36,5 +36,5 @@
 #  when: locale_gen_result.changed
 
 - name: Remove builddeps
-  command: apk del build-deps
+  command: apk del postgres-build-deps
   when: gosu_installed.changed

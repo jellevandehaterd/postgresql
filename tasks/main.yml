@@ -11,26 +11,23 @@
 - include: initialize.yml
 - include: configure.yml
 
-- block:
-  - name: Check postgresql status
-    shell: "/usr/local/bin/gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- status -D {{ postgresql_data_dir }}"
-    register: postgresql_status
-    changed_when: False
-    failed_when: postgresql_status.stdout.find("FAILED") != -1
+- name: Check postgresql status
+  command: "{{ postgresql_handlers.status }}"
+  register: postgresql_status
+  changed_when: False
+  failed_when: postgresql_status.stdout.find("FAILED") != -1
 
-  - name: Start postgresql
-    command: 'gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- start -D {{ postgresql_data_dir }} -s -w -t 10 -l {{postgresql_log_path}}/postgresql.log'
-    when: postgresql_status.stdout.find("server is running") == -1
+- name: Start postgresql
+  command: "{{ postgresql_handlers.start }}"
+  when: postgresql_status.stdout.find("server is running") == -1
 
-  - name: Wait for postgres to be started
-    shell: "/usr/local/bin/gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- status -D {{ postgresql_data_dir }}"
-    register: postgresql_started
-    until: postgresql_started.stdout.find("server is running") != -1
-    retries: 10
-    delay: 10
-    when: postgresql_status.stdout.find("server is running") == -1
-
-  when: ansible_os_family == 'Alpine'
+- name: Wait for postgres to be started
+  command: "{{ postgresql_handlers.status }}"
+  register: postgresql_started
+  until: postgresql_started.stdout.find("server is running") != -1
+  retries: 10
+  delay: 10
+  when: postgresql_status.stdout.find("server is running") == -1
 
 # Configure PostgreSQL.
 - include: databases.yml

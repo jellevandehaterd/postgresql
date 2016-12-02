@@ -1,6 +1,14 @@
 ---
 # handlers file for postgresql
-- name: Include OS-specific handlers (Alpine).
-  include: "Alpine.yml"
-  static: yes
-  when: ansible_os_family == 'Alpine'
+- name: Start postgresql
+  command: "{{ postgresql_handlers.start }}"
+
+- name: Restart postgresql
+  command: "{{ postgresql_handlers.restart }}"
+
+- name: Stop postgresql
+  command: "{{ postgresql_handlers.stop }}"
+
+- name: Status postgresql
+  command: "{{ postgresql_handlers.status }}"
+

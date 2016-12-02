@@ -38,3 +38,8 @@
   set_fact:
     postgresql_log_path: "{{ __postgresql_log_path }}"
   when: postgresql_log_path is not defined
+
+- name: Define postgresql_handlers
+  set_fact:
+    postgresql_handlers: "{{ __postgresql_handlers }}"
+  when: postgresql_handlers is not defined
