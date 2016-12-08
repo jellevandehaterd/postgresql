@@ -73,7 +73,7 @@ A list of databases to ensure exist on the server. Only the `name` is required; 
 A list of users to ensure exist on the server. Only the `name` is required; all other properties are optional.
 
     postgresql_version: [OS-specific]
-    postgresql_data_dir: [OS-specific]
+    postgresql_data_path: [OS-specific]
     postgresql_bin_path: [OS-specific]
     postgresql_config_path: [OS-specific]
     postgresql_daemon: [OS-specific]

@@ -1,9 +1,8 @@
 ---
 # vars file for postgresql
 __postgresql_version: "9.5.4-r0"
-__postgresql_data_dir: "/var/lib/postgresql/data"
+__postgresql_data_path: "/var/lib/postgresql/data"
 __postgresql_bin_path: "/usr/bin"
-__postgresql_config_path: "/etc/postgresql"
 __postgresql_log_path: "/var/log/postgresql"
 __postgresql_daemon: postgresql
 __postgresql_packages:
@@ -11,8 +10,8 @@ __postgresql_packages:
   - postgresql-contrib
 
 __postgresql_handlers:
-  init:     "gosu {{ postgresql_user }} {{ postgresql_bin_path }}/initdb -D {{ postgresql_data_dir }} --encoding 'UTF-8' --no-locale"
-  start:    "gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- start   -D {{ postgresql_data_dir }} -s -w -t 10 -l {{postgresql_log_path}}/postgresql.log"
-  restart:  "gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- restart -D {{ postgresql_data_dir }} -s -m fast -w -t 10 -l {{postgresql_log_path}}/postgresql.log"
-  stop:     "gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- stop    -D {{ postgresql_data_dir }} -s -m fast"
-  status:   "gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- status  -D {{ postgresql_data_dir }}"
+  init:     "gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- initdb  -D {{ postgresql_data_path }} --encoding 'UTF-8' --no-locale"
+  start:    "gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- start   -D {{ postgresql_data_path }} -s -w -t 10 -l {{postgresql_log_path}}/postgresql.log"
+  restart:  "gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- restart -D {{ postgresql_data_path }} -s -m fast -w -t 10 -l {{postgresql_log_path}}/postgresql.log"
+  stop:     "gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- stop    -D {{ postgresql_data_path }} -s -m fast"
+  status:   "gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- status  -D {{ postgresql_data_path }}"
