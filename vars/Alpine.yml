@@ -10,7 +10,7 @@ __postgresql_packages:
   - postgresql-contrib
 
 __postgresql_handlers:
-  init:     "gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- initdb  -D {{ postgresql_data_path }} --encoding 'UTF-8' --no-locale"
+  init:     "gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- initdb  -D {{ postgresql_data_path }}"
   start:    "gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- start   -D {{ postgresql_data_path }} -s -w -t 10 -l {{postgresql_log_path}}/postgresql.log"
   restart:  "gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- restart -D {{ postgresql_data_path }} -s -m fast -w -t 10 -l {{postgresql_log_path}}/postgresql.log"
   stop:     "gosu {{ postgresql_user }} {{ postgresql_bin_path }}/pg_ctl -- stop    -D {{ postgresql_data_path }} -s -m fast"
