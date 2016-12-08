@@ -1,7 +1,7 @@
 ---
 - name: Configure postgresql.conf.
   lineinfile:
-    dest: "{{ postgresql_config_path }}/postgresql.conf"
+    dest: "{{ postgresql_data_path }}/postgresql.conf"
     regexp: "^#?{{ item.option }}.+$"
     line: "{{ item.option }} = '{{ item.value }}'"
     state: "{{ item.state | default('present') }}"
@@ -10,7 +10,7 @@
 - name: Configure pg_hba.conf
   template:
     src: pg_hba.conf.j2
-    dest: "{{postgresql_config_path}}/pg_hba.conf"
+    dest: "{{ postgresql_data_path }}/pg_hba.conf"
     owner: "{{ postgresql_user }}"
     group: "{{ postgresql_group }}"
     mode: "0640"

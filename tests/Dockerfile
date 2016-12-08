@@ -11,9 +11,9 @@ RUN apk add --no-cache --update \
 
 RUN pip install ansible
 
-ENV PGDATA /var/lib/postgresql/main
+ENV PGDATA /var/lib/postgresql/data
 
-VOLUME /var/lib/postgresql/main
+VOLUME /var/lib/postgresql/data
 
 EXPOSE 5432
 
